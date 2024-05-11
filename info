@@ -1,0 +1,47 @@
+Program Specifications
+In this programming assignment, you will implement a persistent key-value store
+program called key-store. key-store can store a key and its associated value persistently
+and can later retrieve a value given a key.
+We will be using files to implement persistent storage for this program. Keys should be
+stored in a file called .keys and values should be stored in a file called .values. In Linux,
+files that start with a ‘.’ are invisible. They will only be listed by ls if you use the –a option.
+If these files do not exist when your program starts, your program should create them.
+Your program should use .keys and .values to store data. In other words, your program
+should not rely on or create other special hidden files.
+Here are some of the specific features of the key-store. key-store should not allow the
+same key to be inserted twice, and you do not have to worry about removing key-value
+pairs from the files. Assume that once you store a key-value pair, it will be stored forever.
+As an added twist, your key-store program should be able to store the contents of a file
+as a value. It should also be able to store the results of a retrieve into a file.
+key-store has the following signature:
+key-store <--store key> <value | --file file_path> |
+<--retrieve key> [--file file_path] |
+[--help]
+The order of the arguments does not matter so long as the argument for an option (e.g.,
+key) follows the option (e.g., --store). That is, key-store can store a key and a value by
+running it like this:
+> key-store --store smith 55a55
+> key-store "Game over, man. Game over!" --store hudson
+It can retrieve a previously stored value by running it like so:
+> key-store --retrieve smith
+55a55
+> key-store --retrieve hudson
+Game over, man. Game over!
+It can store the contents of a file:
+> key-store --store numgen --file ./number_gen
+and retrieve it into another file:
+> key-store --retrieve numgen --file ./number_gen2
+If the user uses the --help option, key-store should print out the signature and exit:
+> key-store --help
+key-store <--store key> | <--retrieve key> <value | --file file_path>
+[--help]
+Some technical notes: (a) keys can be at most 1023 bytes, (b) if a retrieval specifies a file
+that already exists it should truncate the file and replace it with the data stored in the key
+store, (c) you will probably want to use the following system and library calls:
+getopt_long
+open
+close
+pread or lseek
+read
+write
+fstat or stat
